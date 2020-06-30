@@ -36,7 +36,9 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-@Component
+@Component({
+    name:'HelloWorld'
+})
 export default class HelloWorld extends Vue {
   @Prop() private msg!: string;
 }
