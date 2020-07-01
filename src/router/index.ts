@@ -1,13 +1,17 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '../views/Home.vue'
+import Login  from "@/views/Auth/Login.vue"
 
 Vue.use(VueRouter)
 
   const routes: Array<RouteConfig> = [
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
+    meta: {
+        requiresAuth: true
+    },
     component: Home
   },
   {
@@ -41,7 +45,26 @@ Vue.use(VueRouter)
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/Transaction.vue')
-  }
+  },
+  {
+    path: '/',
+    name: 'Login',
+    meta: {
+        guest: true
+    },
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component:Login
+  },
+  {
+    path: '/error',
+    name: 'Error',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/ErrorPage.vue')
+  },
 
 ]
 

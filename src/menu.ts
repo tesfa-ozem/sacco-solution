@@ -3,7 +3,7 @@ const menue  = [
         name:"Dashboard",
         icon:"las la-layer-group la-2x ",
         iconfile:"../assets/logo.png",
-        path:"/"
+        path:"/home"
     },
     {
         name:"Customers",

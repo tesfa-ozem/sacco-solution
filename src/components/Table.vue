@@ -1,24 +1,35 @@
 <template>
   <div>
-    <ejs-grid :dataSource="data">
+    <ejs-grid
+      :dataSource="ledger"
+      :allowPaging="true"
+      :pageSettings="pageSettings"
+      :toolbar="toolbarOptions"
+      height="272px"
+    >
       <e-columns>
         <e-column
-          field="OrderID"
-          headerText="Order ID"
-          textAlign="Right"
-          width="90"
+          field="transaction_no"
+          headerText="Transaction Number"
+          textAlign="Center"
+        ></e-column>
+
+        <e-column
+          field="transaction_type"
+          headerText="Transaction"
+          textAlign="Center"
         ></e-column>
         <e-column
-          field="CustomerID"
-          headerText="Customer ID"
-          width="120"
+          field="transaction_name"
+          headerText="Description"
+          textAlign="Center"
         ></e-column>
+        <e-column field="date" headerText="Date" textAlign="Center"></e-column>
         <e-column
-          field="Freight"
-          headerText="Freight"
-          textAlign="Right"
-          format="C2"
-          width="90"
+          field="amount"
+          headerText="Amount"
+          textAlign="Center"
+          
         ></e-column>
       </e-columns>
     </ejs-grid>
@@ -26,30 +37,58 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { GridPlugin } from "@syncfusion/ej2-vue-grids";
+import { Component, Prop, Vue } from "vue-property-decorator";
+import { GridPlugin, Page, Toolbar, Search } from "@syncfusion/ej2-vue-grids";
 
 Vue.use(GridPlugin);
 
-export default {
-  data() {
+export default Vue.extend({
+  data: () => {
     return {
-      data: [
-        { OrderID: 10248, CustomerID: "VINET", Freight: 32.38 },
-        { OrderID: 10249, CustomerID: "TOMSP", Freight: 11.61 },
-        { OrderID: 10250, CustomerID: "HANAR", Freight: 65.83 },
-        { OrderID: 10251, CustomerID: "VICTE", Freight: 41.34 },
-        { OrderID: 10252, CustomerID: "SUPRD", Freight: 51.3 },
-        { OrderID: 10253, CustomerID: "HANAR", Freight: 58.17 },
-        { OrderID: 10254, CustomerID: "CHOPS", Freight: 22.98 },
-        { OrderID: 10255, CustomerID: "RICSU", Freight: 148.33 },
-        { OrderID: 10256, CustomerID: "WELLI", Freight: 13.97 },
-      ],
+      pageSettings: { pageSizes: [12, 50, 100, 200], pageCount: 4 },
+      toolbarOptions: ["Search"],
+      cTemplate: function() {
+        return {
+          template: Vue.component("columnTemplate", {
+            template: `<div >
+                    {{cData}}
+                </div>
+                `,
+            data: function() {
+              return {
+                data: {},
+              };
+            },
+            computed: {
+              cData: function() {
+                return this.data.amount;
+              },
+            },
+          }),
+        };
+      },
     };
   },
-};
+  computed: {
+    ledger() {
+      return this.$store.state.ledger.data;
+    },
+  },
+  provide: {
+    grid: [Page, Search],
+  },
+});
 </script>
 
 <style>
+@import "../../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-calendars/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-dropdowns/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-inputs/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-navigations/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-popups/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-vue-grids/styles/material.css";
 @import "../../node_modules/@syncfusion/ej2-vue-grids/styles/material.css";
 </style>

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@syncfusion/ej2-base": "^18.1.57",
+    "@syncfusion/ej2-vue-buttons": "^18.1.56",
     "@syncfusion/ej2-vue-grids": "^18.1.59",
     "@syncfusion/ej2-vue-inputs": "^18.1.59",
     "axios": "^0.19.2",
