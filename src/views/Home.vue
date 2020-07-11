@@ -12,7 +12,9 @@
         <div class="icons-container">
           <personIcon class="icon" />
         </div>
-        <button class="action-button">Apply Loan</button>
+        <button class="action-button" @click="$router.push('/calculator')">
+          Apply Loan
+        </button>
       </div>
       <div class="action-container">
         <div class="icons-container">
@@ -27,7 +29,9 @@
         <div class="stat-card">
           <div class="stat-card-title">
             <span class="stat-name">Deposits</span>
-            <span class="count">KES {{ user.current_deposits }}</span>
+            <span class="count"
+              >KES {{ formatPrice(user.current_deposits) }}</span
+            >
           </div>
           <div class="start-icon">
             <i class="las la-plus-circle la-2x"></i>
@@ -36,7 +40,7 @@
         <div class="stat-card">
           <div class="stat-card-title">
             <span class="stat-name">Outstanding Loan</span>
-            <span class="count">KES {{ user.current_loan }}</span>
+            <span class="count">KES {{ formatPrice(user.current_loan) }}</span>
           </div>
           <div class="start-icon">
             <i class="las la-plus-circle la-2x"></i>
@@ -63,7 +67,6 @@
     <div class="stats">
       <Table />
     </div>
-    
   </div>
 </template>
 
@@ -77,22 +80,24 @@ import fileIcon from "@/assets/svg/files.svg";
 import Table from "@/components/Table.vue";
 
 @Component({
-  name: "Home",
   components: {
     HelloWorld,
     MoneyIcon,
     personIcon,
     fileIcon,
-    Table,
-  },
+    Table
+  }
 })
 export default class Home extends Vue {
-  user = {};
   created() {
-    this.$store.dispatch("getLedger");
-    this.$store.dispatch("fetchUser").then((res) => {
-      this.user = this.$store.state.user.data;
-    });
+    this.$store.dispatch("getLoanCategories");
+  }
+  formatPrice(value) {
+    this.val = (value / 1).toFixed(2).replace(",", ".");
+    return this.val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+  get user() {
+    return this.$store.state.user.data;
   }
 }
 </script>
@@ -108,7 +113,7 @@ $textColor: #314172;
 .title {
   color: $textColor;
   font-size: 36px;
-  margin-bottom: 150px;
+  margin-bottom: 50px;
 }
 .actions {
   display: flex;
@@ -147,8 +152,8 @@ $textColor: #314172;
   width: 70px;
 }
 .stats {
-  padding-left: 220px;
-  padding-right: 220px;
+  padding-left: 34px;
+  padding-right: 34px;
   display: flex;
   flex-direction: column;
   p {
@@ -158,7 +163,7 @@ $textColor: #314172;
 
   .stat-card {
     height: 150px;
-    width: 250px;
+    width: 350px;
     background-color: white;
     display: flex;
     flex-direction: row;
@@ -184,7 +189,7 @@ $textColor: #314172;
       color: rgb(136, 136, 136);
     }
     .count {
-      font-size: 32px;
+      font-size: 26px;
       font-weight: 600;
       color: $textColor;
     }
@@ -196,6 +201,9 @@ $textColor: #314172;
   justify-content: space-between;
 }
 @media only screen and (max-width: 600px) {
+  .stat-card {
+    width: 100px;
+  }
   .actions {
     display: flex;
     flex-direction: column;
@@ -228,5 +236,4 @@ $textColor: #314172;
     margin-bottom: 10px;
   }
 }
-
 </style>

@@ -12,7 +12,7 @@
       </div>
       <div class="tab-name">{{ menu.name }}</div>
     </div>
-    <button><i class="las la-plus"></i> Create Invoice</button>
+    <button @click="logout()"><i class="las la-plus"></i> Logout</button>
   </div>
 </template>
 <script lang="ts">
@@ -22,10 +22,13 @@ import router from "../router";
 
 @Component({
   name: "SideNav",
-  components: {},
+  components: {}
 })
 export default class SideNav extends Vue {
   menus = [...menu];
+  logout() {
+    console.log("");
+  }
 }
 </script>
 
@@ -70,15 +73,15 @@ export default class SideNav extends Vue {
 .nav-header {
   height: 140px;
 }
-button{
-    margin-top: 20px;
-    background-color: #5ACADC;
-    width: 70%;
-    height: 40px;
-    border: none;
-    border-radius: 5px;
-    color:white ;
-    font-size: 16px;
+button {
+  margin-top: 20px;
+  background-color: #5acadc;
+  width: 70%;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
 }
 @media screen and (max-height: 450px) {
   .sidebar {

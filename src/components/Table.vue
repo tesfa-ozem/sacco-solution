@@ -29,7 +29,6 @@
           field="amount"
           headerText="Amount"
           textAlign="Center"
-          
         ></e-column>
       </e-columns>
     </ejs-grid>
@@ -56,27 +55,27 @@ export default Vue.extend({
                 `,
             data: function() {
               return {
-                data: {},
+                data: {}
               };
             },
             computed: {
               cData: function() {
                 return this.data.amount;
-              },
-            },
-          }),
+              }
+            }
+          })
         };
-      },
+      }
     };
   },
   computed: {
     ledger() {
       return this.$store.state.ledger.data;
-    },
+    }
   },
   provide: {
-    grid: [Page, Search],
-  },
+    grid: [Page, Search]
+  }
 });
 </script>
 

@@ -1,7 +1,12 @@
 <template>
   <div id="app">
-    <template v-if="this.$router.currentRoute.path == '/'">
-      <router-view></router-view>
+    <vue-progress-bar></vue-progress-bar>
+    <template v-if="this.$router.currentRoute.meta.guest == true"
+      ><div>
+        <transition name="component-fade" mode="out-in">
+          <router-view></router-view>
+        </transition>
+      </div>
     </template>
     <template v-else>
       <div>
@@ -10,29 +15,13 @@
           v-if="windowWidth > 939"
         />
         <MobileMenu v-if="windowWidth < 939" />
-        <div class="main" v-bind:style="{ marginLeft: active ? '300px' : '0' }">
+        <div class="main">
           <DynamicHeader v-on:toggle-nav="openNav()" v-if="windowWidth > 939" />
 
           <transition name="component-fade" mode="out-in">
             <router-view />
           </transition>
-          <div class="footer">
-          <div class="footer-container">
-            <span class="footer-title">Nothing.</span>
-            <span class="footer-description"
-              >ipsum dolor sit amet consectetur, adipisicing elit. Sapiente
-              numquam voluptates nostrum molestiae atque? Perspiciatis fugiat
-              corporis,
-            </span>
-            <button>Ask Anything</button>
-          </div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
         </div>
-        </div>
-        
       </div>
     </template>
   </div>
@@ -43,17 +32,17 @@ import SideNav from "@/components/SideNav.vue";
 import DynamicHeader from "@/components/Header.vue";
 import MobileMenu from "@/components/MobileMenu.vue";
 @Component({
-  name: "App",
   components: {
     SideNav,
     DynamicHeader,
-    MobileMenu,
-  },
+    MobileMenu
+  }
 })
 export default class App extends Vue {
   active = true;
   openNav() {
-    this.active = !this.active;
+    console.log();
+    /* this.active = !this.active; */
   }
   created() {
     window.addEventListener("resize", () =>
@@ -82,7 +71,7 @@ $textColor: #314172;
 body {
   margin: 0px;
   height: 100%;
-  font-family: 'Nunito san';
+  font-family: "Nunito san";
 }
 #app {
   font-family: "Nunito Sans", sans-serif;
@@ -107,6 +96,7 @@ body {
 .main {
   transition: margin-left 0.5s;
   margin-top: 70px;
+  margin-left: 300px;
 }
 .component-fade-enter-active,
 .component-fade-leave-active {
@@ -120,6 +110,7 @@ body {
   .main {
     margin-top: 0;
     padding-top: 50px;
+    margin-left: 0px;
   }
 }
 // footer

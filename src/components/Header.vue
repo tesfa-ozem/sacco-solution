@@ -1,9 +1,8 @@
 <template>
   <div class="header-container">
-      <button @click="$emit('toggle-nav')">
-           <i class="las la-bars la-2x" ></i>
-      </button>
-     
+    <button @click="$emit('toggle-nav')">
+      <i class="las la-bars la-2x"></i>
+    </button>
   </div>
 </template>
 <script lang="ts">
@@ -11,7 +10,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({
   name: "",
-  components: {},
+  components: {}
 })
 export default class DynamicHeader extends Vue {
   created() {
@@ -23,7 +22,7 @@ export default class DynamicHeader extends Vue {
 <style lang="scss" scoped>
 $shocking-pink: #ff1ead;
 .header-container {
-  background-color:white;
+  background-color: white;
   position: fixed;
   height: 70px;
   top: 0;
@@ -32,9 +31,10 @@ $shocking-pink: #ff1ead;
   flex-direction: row;
   align-items: center;
   transition: top 0.3s;
--webkit-box-shadow: 0px 3px 5px 2px rgba(161,161,161,0.09);
--moz-box-shadow: 0px 3px 5px 2px rgba(161,161,161,0.09);
-box-shadow: 0px 3px 5px 2px rgba(161,161,161,0.09);}
+  -webkit-box-shadow: 0px 3px 5px 2px rgba(161, 161, 161, 0.09);
+  -moz-box-shadow: 0px 3px 5px 2px rgba(161, 161, 161, 0.09);
+  box-shadow: 0px 3px 5px 2px rgba(161, 161, 161, 0.09);
+}
 .header-container a {
   float: left;
   display: block;
@@ -44,8 +44,8 @@ box-shadow: 0px 3px 5px 2px rgba(161,161,161,0.09);}
   text-decoration: none;
 }
 
-button{
-    border: transparent;
-    background-color: transparent;
+button {
+  border: transparent;
+  background-color: transparent;
 }
 </style>

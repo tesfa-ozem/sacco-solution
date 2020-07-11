@@ -1,47 +1,43 @@
 <template>
   <div>
     <div class="container">
+      <input id="toggle" type="checkbox" />
 
-    <input id="toggle" type="checkbox">
+      <label class="toggle-container" for="toggle">
+        <span class="button button-toggle"></span>
+      </label>
 
-    
-    <label class="toggle-container" for="toggle">
-     
-      <span class="button button-toggle"></span>
-    </label>
+      <!-- The Nav Menu -->
+      <nav class="nav">
+        <a
+          v-for="menu in menus"
+          :key="menu.name"
+          @click="$router.push(menu.path)"
+          class="nav-item"
+          href="#"
+          >{{ menu.name }}</a
+        >
+      </nav>
 
-    <!-- The Nav Menu -->
-    <nav class="nav">
-       
-      <a v-for="menu in menus"
-      :key="menu.name"
-      
-      @click="$router.push(menu.path)" class="nav-item" href="#">{{menu.name}}</a>
-      
-    </nav>
-
-    <!-- Dummy Content -->
-    
-  </div>
+      <!-- Dummy Content -->
+    </div>
   </div>
 </template>
-<script lang='ts'>
-import { Component, Prop, Vue } from 'vue-property-decorator'
+<script lang="ts">
+import { Component, Prop, Vue } from "vue-property-decorator";
 import menu from "../menu";
 import router from "../router";
 @Component({
-  name: '',
-  components: {
-    
-  }
+  name: "",
+  components: {}
 })
 export default class MobileMenu extends Vue {
   menus = [...menu];
 }
 </script>
 
-<style lang='scss' scoped>
-  $items: 4;
+<style lang="scss" scoped>
+$items: 4;
 $transition-duration: 0.5s;
 $transition-delay: 0.05s;
 
@@ -51,24 +47,19 @@ $transition-delay: 0.05s;
   box-sizing: border-box;
 }
 
-
-
-
-
 a {
   text-decoration: none;
 }
 
 .container {
-    
-    position: fixed;
+  position: fixed;
   display: flex;
   flex-direction: column;
   align-content: flex-start;
   justify-content: start;
   padding: 50px auto 0;
   width: 100%;
-  
+  z-index: 1;
   background-color: #2f46a7;
   overflow: hidden;
 }
@@ -79,12 +70,12 @@ a {
   display: none; //hides the checkbox
 }
 
-
 // Styles for the 'open' state, if the checkbox is checked
 #toggle:checked {
   //Any element you need to change the style if menu is open goes here, using the sibling selector (~)
   & ~ .toggle-container .button-toggle {
-    box-shadow: 0 0 0 550px rgba( 0, 0, 0, 0.1), inset 0 0 0 20px rgba( 0, 0, 0, 0.1);
+    box-shadow: 0 0 0 550px rgba(0, 0, 0, 0.1),
+      inset 0 0 0 20px rgba(0, 0, 0, 0.1);
 
     &:before {
       transform: translateY(-50%) rotate(45deg) scale(1);
@@ -111,7 +102,6 @@ a {
       opacity: 1;
       transform: scaleY(1);
       transition: $transition-duration, opacity 0.1s;
-
 
       // Setting delays for the nav items in open transition
       @for $i from 1 through $items {
@@ -156,15 +146,17 @@ a {
 
   // Shadow on Hover
   &:hover {
-   box-shadow: 0 0 0 8px rgba(0, 0, 0, 0.1), inset 0 0 0 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 8px rgba(0, 0, 0, 0.1),
+      inset 0 0 0 20px rgba(0, 0, 0, 0.1);
   }
 
   // Making the 'X' icon using `:before` and `:after` pseudo-elements
   // Initially hidden beause of `scale(0)` transformation
 
-  &:before, &:after {
+  &:before,
+  &:after {
     position: absolute;
-    content: '';
+    content: "";
     top: 50%;
     left: 0;
     width: 100%;
@@ -239,12 +231,12 @@ a {
   //getting lines for the hamburger menu icon
   &:before {
     position: absolute;
-    content: '';
+    content: "";
     top: 50%;
     left: 0;
     width: 100%;
     height: 2px;
-    background-color: rgb(207, 207, 207);;
+    background-color: rgb(207, 207, 207);
     transform: translateY(-50%) scaleY(5);
     transition: $transition-duration;
   }
@@ -252,13 +244,11 @@ a {
 
 /* Dummy Content */
 
-
-
 .circle {
   display: inline-block;
   width: 75px;
   height: 75px;
-  background-color: #EC7263;
+  background-color: #ec7263;
   border-radius: 100%;
 }
 
@@ -269,7 +259,7 @@ a {
     display: inline-block;
     height: 10px;
     margin: 0 5px;
-    background-color: #C06162;
+    background-color: #c06162;
     border-radius: 5px;
 
     &:first-child {
@@ -287,7 +277,7 @@ a {
   position: relative;
   width: 200px;
   height: 300px;
-  background-color: #FEBE7E;
+  background-color: #febe7e;
   z-index: 1;
 }
 
@@ -297,11 +287,12 @@ a {
   top: -256px;
   width: 250px;
   height: 210px;
-  background-color: #C28683;
+  background-color: #c28683;
 
-  &:before, &:after {
+  &:before,
+  &:after {
     position: absolute;
-    content: '';
+    content: "";
     top: 0;
     width: 40%;
     height: 100%;
@@ -309,12 +300,12 @@ a {
 
   &:before {
     left: 0;
-    background-color: #9D567C;
+    background-color: #9d567c;
   }
 
   &:after {
     right: 0;
-    background-color: #958C6B;
+    background-color: #958c6b;
   }
 }
 </style>
