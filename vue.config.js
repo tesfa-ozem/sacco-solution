@@ -13,7 +13,6 @@ module.exports = {
   },
 
   pwa: {
-    workboxPluginMode: 'InjectManifest',
     name: 'sacco-solution'
   }
 };
