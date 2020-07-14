@@ -6,6 +6,10 @@ import router from "@/router";
 Vue.use(Vuex);
 const localurl = "http://127.0.0.1:5000/";
 const liveUrl = "https://api-sacco.tritel.co.ke/";
+
+
+
+
 export default new Vuex.Store({
   state: {
     windowWidth: window.innerWidth,

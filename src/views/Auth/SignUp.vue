@@ -147,17 +147,17 @@
             <div class="form-row">
               <div class="input">
                 <span>First Name</span>
-                <input v-model.trim="firstName" placeholder="First name..." />
-                <!--  <span>{{
-                  emptyName
-                }}</span> -->
+                <input  v-model="userFormGroup.props.firstName"  placeholder="First name..." />
+                 <span v-if="userFormGroup.controls.firstName.errors">{{
+                  userFormGroup.controls.firstName.errorMessage
+                }}</span>
               </div>
               <div class="input">
                 <span>Last Name</span>
-                <input v-model.trim="lastName" placeholder="Last name..." />
-                <!-- <span>{{
-                  emptyLastName
-                }}</span> -->
+                <input v-model="userFormGroup.props.lastName" placeholder="Last name..." />
+                <span>{{
+                  userFormGroup.controls.lastName.errorMessage
+                }}</span>
               </div>
             </div>
 
@@ -166,27 +166,34 @@
                 <div><span>Id/Passport Number</span><span> *</span></div>
                 <input
                   placeholder="ID NO..."
-                  type="number"
-                  v-model.trim="idNumber"
+                  type="text"
+                  v-model="userFormGroup.props.idNumber"
                 />
+                <span v-if="userFormGroup.controls.idNumber.errors">{{
+                  userFormGroup.controls.idNumber.errors.maxLength.message
+                }}</span>
               </div>
             </div>
             <div class="form-row">
               <div class="input">
                 <div><span>Phone</span><span> *</span></div>
                 <input
-                  v-model.trim="phoneNumber"
+                  v-model="userFormGroup.props.phoneNumber"
                   placeholder="Phone..."
-                  type="tel"
+                  type="text"
                 />
+                <span v-if="userFormGroup.controls.phoneNumber.errors">{{
+                  userFormGroup.controls.phoneNumber.errors.maxLength.message
+                }}</span>
               </div>
               <div class="input">
                 <span>Email </span>
                 <input
-                  v-model.trim="email"
+                  v-model="userFormGroup.props.email"
                   placeholder="Email address..."
                   type="email"
                 />
+                <span v-if="userFormGroup.controls.email.errors">{{userFormGroup.controls.email.errors.email.message}}</span>
               </div>
             </div>
 
@@ -194,16 +201,20 @@
               <div class="input">
                 <span>Password</span>
                 <input
-                  v-model.trim="password"
+                  v-model="userFormGroup.props.password" 
                   type="password"
                   placeholder="Password..."
                 />
+                <span v-if="userFormGroup.controls.password.errors">{{
+                  userFormGroup.controls.password.errors.compare.message 
+                }}</span>
               </div>
             </div>
             <div class="form-row">
               <div class="input">
                 <span>Confirm Password</span>
-                <input type="password" placeholder="Password..." />
+                <input type="password" v-model="userFormGroup.props.confirmPassword" placeholder="Password..." />
+                <span v-if="userFormGroup.controls.confirmPassword.errors">{{userFormGroup.controls.confirmPassword.errors.compare.message}}</span>
               </div>
             </div>
           </div>
@@ -325,26 +336,20 @@ import { DatePickerPlugin } from "@syncfusion/ej2-vue-calendars";
 import { DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
 Vue.use(DropDownListPlugin);
 Vue.use(DatePickerPlugin);
+import { RxFormBuilder, IFormGroup } from "@rxweb/reactive-forms"
+import { User} from "@/models/UserModel.ts"
 
-@Component({
-  components: {}
-})
+@Component
 export default class SignUp extends Vue {
   buttonText = "Next";
-  firstName = "";
-  lastName = "";
-  idNumber = "";
+  
   href = "";
-  phoneNumber = "";
-  emailAddress = "";
   gender = ["male", "female"];
   selectedGender = "";
   maritalStatus = ["married", "single"];
   selectedMaritalSatus = "";
   dateOfBirth = "";
   address = "";
-  email = "";
-  password = "";
   content = "Sign Up";
   cssClass = "e-hide-spinner";
   error = "null";
@@ -359,7 +364,13 @@ export default class SignUp extends Vue {
   kraPin = "";
   occupation = "";
   paymentPhone = 254;
+        userFormGroup!: IFormGroup<User>;
+        formBuilder: RxFormBuilder = new RxFormBuilder();
 
+        constructor() {
+            super();
+            this.userFormGroup = this.formBuilder.formGroup(User) as IFormGroup<User>;
+        }
   /* get currentTab(){
       if(this.$store.state.user?.data?.state=='draft'){
           return 2
@@ -388,14 +399,15 @@ export default class SignUp extends Vue {
   }
   register() {
     const data = {
-      "username": this.email,
-      "password": this.password,
-      "name": this.firstName + " " + this.lastName,
-      "email": this.email,
-      "phone_no": this.phoneNumber,
-      "idno": this.idNumber
+      "username": this.userFormGroup.props.email,
+      "password": this.userFormGroup.props.password,
+      "name": this.userFormGroup.props.firstName + " " + this.userFormGroup.props.lastName,
+      "email": this.userFormGroup.props.email,
+      "phone_no": this.userFormGroup.props.phoneNumber,
+      "idno": this.userFormGroup.props.idNumber
     };
-    this.$store
+    if(!this.userFormGroup.invalid){
+        this.$store
       .dispatch("signup", data)
       .then(resp => {
         console.log(resp);
@@ -414,6 +426,11 @@ export default class SignUp extends Vue {
     } */
         this.error = err == null ? "null" : "not";
       });
+    }else{
+        console.log(this.userFormGroup.controlsError)
+        alert(this.userFormGroup.controlsError)
+    }
+    
   }
   updateDetails() {
     const data = {
@@ -431,8 +448,8 @@ export default class SignUp extends Vue {
   }
   fetchToken() {
     const auth = {
-      "username": this.email,
-      "password": this.password
+      "username": this.userFormGroup.props.email,
+      "password": this.userFormGroup.props.password
     };
     this.$store.dispatch("fetchToken", auth).then(resp => {
       this.currentTab = 2;
@@ -758,5 +775,6 @@ button:hover {
     flex-direction: column;
     width: 100%;
   }
+  
 }
 </style>

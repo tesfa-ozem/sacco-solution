@@ -7,6 +7,16 @@ import * as Sentry from "@sentry/browser";
 import { Vue as VueIntegration } from "@sentry/integrations";
 import VueProgressBar from "vue-progressbar";
 import "./registerServiceWorker";
+import { ReactiveFormConfig, ClientLibrary } from '@rxweb/reactive-forms';
+
+ReactiveFormConfig.clientLib = ClientLibrary.Vue;
+
+ReactiveFormConfig.set({
+    validationMessage: {
+        required: "This Field is required",
+        
+    }
+});
 
 Vue.use(VueProgressBar, {
   color: "rgb(143, 255, 199)",
