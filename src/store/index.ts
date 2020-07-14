@@ -61,7 +61,7 @@ export default new Vuex.Store({
     fetchToken({ commit }, auth) {
       commit("setAnimation", true);
       return new Promise((resolve, reject) => {
-        commit("authRequest");
+        
         Axios({ url: liveUrl + "api/token", method: "GET", auth: auth })
           .then(resp => {
             const token = resp.data.token;

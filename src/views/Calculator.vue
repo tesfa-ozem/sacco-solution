@@ -134,9 +134,7 @@ Vue.use(DatePickerPlugin);
         currency: 'USD',
         minimumFractionDigits: 0
     }); */
-@Component({
-  components: {}
-})
+@Component
 export default class Calculator extends Vue {
   comparisonvalue: any = {};
   /* loanAmount = 100000;  */

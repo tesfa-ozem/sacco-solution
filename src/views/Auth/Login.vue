@@ -71,7 +71,7 @@ export default class Login extends Vue {
       username: this.mail,
       password: this.pass
     };
-
+    this.$Progress.start()
     this.$store
       .dispatch("singin", auth)
       .then(res => {
@@ -79,12 +79,14 @@ export default class Login extends Vue {
 
         this.$store.dispatch("getLedger");
         this.$store.dispatch("fetchUser").then(res => {
+            this.$Progress.finish()
           this.$router.push("/home").catch(err => {
             console.log(err);
           });
         });
       })
       .catch(err => {
+           this.$Progress.fail()
         if (err.response) {
           this.error = err == null ? "null" : "not";
 
