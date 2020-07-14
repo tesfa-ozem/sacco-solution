@@ -179,7 +179,7 @@ body {
 
 // Top Nav
 .topnav {
-  background-color: rgba(163, 163, 163, 0);
+  background-color: $primaryColor;
   overflow: hidden;
 }
 
