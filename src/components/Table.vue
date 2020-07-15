@@ -22,6 +22,7 @@
         <e-column
           field="transaction_name"
           headerText="Description"
+          :template='cTemplate'
           textAlign="Center"
         ></e-column>
         <e-column field="date" headerText="Date" textAlign="Center"></e-column>
@@ -48,14 +49,14 @@ export default Vue.extend({
       toolbarOptions: ["Search"],
       cTemplate: function() {
         return {
-          template: Vue.component("columnTemplate", {
+          template: Vue.component("cTemplate", {
             template: `<div >
-                    {{cData}}
+                    {{ledger.amount}}
                 </div>
                 `,
             data: function() {
               return {
-                data: {}
+                ledger: {}
               };
             },
             computed: {

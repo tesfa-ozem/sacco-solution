@@ -124,23 +124,18 @@
 
       <!-- Circles which indicates the steps of the form: -->
       <div id="regForm">
-        <div>
-          <span
-            class="step"
-            v-bind:class="currentTab == 1 ? 'active' : ''"
-          ></span>
-          <span
-            class="step"
-            v-bind:class="currentTab == 2 ? 'active' : ''"
-          ></span>
-
-          <span
-            class="step"
-            v-bind:class="[
-              currentTab == 3 ? 'active' : '',
-              currentTab == 3 ? 'finish' : ''
-            ]"
-          ></span>
+        <div class="bx--grid">
+            <div class="bx--row">
+    <div class="bx--col-lg-16"> <cv-progress
+          :vertical="false">
+          <cv-progress-step label="Step 1" additional-info="Optional info" :complete="complete[0]"/>
+           <cv-progress-step label="Step 2 is a bit longer" :complete="complete[1]"/>
+           <cv-progress-step label="Step 3" :complete="complete[0]" tip-text="Step 3 has hard coded tip"/>
+  
+  
+          </cv-progress></div>
+  </div>
+         
         </div>
         <transition name="fade" mode="out-in">
           <div class="tabs" v-if="currentTab == 1" key="1">
@@ -341,6 +336,7 @@ import { User} from "@/models/UserModel.ts"
 
 @Component
 export default class SignUp extends Vue {
+  complete:number []=[]
   buttonText = "Next";
   
   href = "";
@@ -387,11 +383,14 @@ export default class SignUp extends Vue {
       this.$store.state.user?.data?.data_type == "member_application" &&
       this.$store.state.user?.data?.state == "payment"
     ) {
+        this.complete.push(3)
       this.currentTab = 3;
     } else if (
       this.$store.state.user?.data?.data_type == "member_application"
     ) {
+        
       this.currentTab = 2;
+      this.complete.push(2)
     }
   }
   get registationFee() {
@@ -444,6 +443,7 @@ export default class SignUp extends Vue {
       console.log(resp);
       this.successful = resp.status;
       this.currentTab = 3;
+      this.complete.push(3)
     });
   }
   fetchToken() {
@@ -453,6 +453,7 @@ export default class SignUp extends Vue {
     };
     this.$store.dispatch("fetchToken", auth).then(resp => {
       this.currentTab = 2;
+      this.complete.push(2)
     });
   }
   clickHanlder() {

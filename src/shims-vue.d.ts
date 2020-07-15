@@ -21,4 +21,6 @@ declare module "vue-progressbar" {
         $Progress: ProgressMethods;
       }
     }
-  }
+}
+
+declare module "@carbon/vue/src/index"

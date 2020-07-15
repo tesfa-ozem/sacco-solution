@@ -14,5 +14,6 @@ module.exports = {
 
   pwa: {
     name: 'sacco-solution'
-  }
+  },
+  runtimeCompiler: true
 };

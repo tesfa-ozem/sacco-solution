@@ -8,7 +8,9 @@ import { Vue as VueIntegration } from "@sentry/integrations";
 import VueProgressBar from "vue-progressbar";
 import "./registerServiceWorker";
 import { ReactiveFormConfig, ClientLibrary } from '@rxweb/reactive-forms';
-
+import "carbon-components/css/carbon-components.css";
+import CarbonComponentsVue from "@carbon/vue/src/index";
+Vue.use(CarbonComponentsVue);
 ReactiveFormConfig.clientLib = ClientLibrary.Vue;
 
 ReactiveFormConfig.set({
@@ -28,13 +30,22 @@ Sentry.init({
     "https://a30e0cd87eb14e38a4f5e6e7f23742ff@o415332.ingest.sentry.io/5306262",
   integrations: [
     new VueIntegration({ Vue, attachProps: true, logErrors: true })
-  ]
+  ],
+  beforeSend(event, hint) {
+    // Check if it is an exception, and if so, show the report dialog
+    if (event.exception) {
+      Sentry.showReportDialog({ eventId: event.event_id });
+    }
+    return event;
+  }
 });
 
 Vue.config.productionTip = false;
 
 new Vue({
+    render: h => h(App),
   router,
   store,
-  render: h => h(App)
+  components: { App },
+  
 }).$mount("#app");

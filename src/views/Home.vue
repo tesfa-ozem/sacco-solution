@@ -6,21 +6,21 @@
         <div class="icons-container">
           <MoneyIcon class="icon" />
         </div>
-        <button class="action-button">Deposit</button>
+        <button class="action-button">Payments</button>
       </div>
       <div class="action-container">
         <div class="icons-container">
           <personIcon class="icon" />
         </div>
         <button class="action-button" @click="$router.push('/calculator')">
-          Apply Loan
+          Loans
         </button>
       </div>
       <div class="action-container">
         <div class="icons-container">
           <fileIcon class="icon" />
         </div>
-        <button class="action-button">View Activities</button>
+        <button class="action-button">Activities</button>
       </div>
     </div>
     <div class="stats">
