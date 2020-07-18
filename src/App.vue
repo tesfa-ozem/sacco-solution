@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <vue-progress-bar></vue-progress-bar>
+    <notifications group="foo" />
     <template v-if="this.$router.currentRoute.meta.guest == true"
       ><div>
         <transition name="component-fade" mode="out-in">
@@ -134,7 +135,7 @@ body {
 }
 .main {
   transition: margin-left 0.5s;
-  margin-top: 70px;
+ 
   margin-left: 300px;
 }
 .component-fade-enter-active,

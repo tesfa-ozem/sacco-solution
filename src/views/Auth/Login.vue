@@ -1,17 +1,7 @@
 <template>
   <div class="main-container">
     <div class="form-container">
-      <div class="side-image">
-        <span>Unlock your acount</span>
-        <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. </span>
-        <span
-          >Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non ad
-          quisquam praesentium facilis commodi error sint neque consectetur
-          repudiandae facere vitae harum laborum, enim cupiditate eius quaerat
-          sequi sunt! Placeat.</span
-        >
-        <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. </span>
-      </div>
+      
 
       <!-- Circles which indicates the steps of the form: -->
       <div id="regForm">

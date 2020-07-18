@@ -13,7 +13,7 @@ const menue = [
   },
   {
     name: "Services",
-    icon: "las la-headset la-2x ",
+    icon: "las la-coins la-2x ",
     iconfile: "../assets/communication.svg",
     path: "/services"
   },

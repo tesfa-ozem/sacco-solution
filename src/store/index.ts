@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import Axios from "axios";
 import router from "@/router";
-
+import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex);
 const localurl = "http://127.0.0.1:5000/";
 const liveUrl = "https://api-sacco.tritel.co.ke/";
@@ -11,6 +11,7 @@ const liveUrl = "https://api-sacco.tritel.co.ke/";
 
 
 export default new Vuex.Store({
+    plugins: [createPersistedState()],
   state: {
     windowWidth: window.innerWidth,
     payments: {},
@@ -99,6 +100,7 @@ export default new Vuex.Store({
           })
           .catch(err => {
             alert(err);
+            
             commit("authError");
             commit("setAnimation", false);
             localStorage.removeItem("token");
@@ -114,6 +116,12 @@ export default new Vuex.Store({
             resolve(resp);
           })
           .catch(err => {
+            if (err.response.status == 401){
+                localStorage.removeItem("token");
+                console.log(err.response)
+                router.push("/");
+
+            }
             localStorage.removeItem("token");
             reject(err);
           });
@@ -122,7 +130,7 @@ export default new Vuex.Store({
     logout({ commit }) {
       return new Promise((resolve, reject) => {
         commit("logout");
-        localStorage.removeItem("token");
+        localStorage.clear();
         delete Axios.defaults.headers.common["Authorization"];
         resolve();
       });
@@ -139,8 +147,10 @@ export default new Vuex.Store({
             resolve(resp);
           })
           .catch(err => {
-            if (err.response) {
-              console.log(err.response);
+            if (err.response.status == 401){
+                localStorage.clear();
+                console.log(err.response)
+                router.push("/");
             }
 
             reject(err);
@@ -161,6 +171,11 @@ export default new Vuex.Store({
             commit("setAnimation", false);
           })
           .catch(err => {
+            if (err.response.status == 401){
+                localStorage.clear();
+                console.log(err.response)
+                router.push("/");
+            }
             reject(err);
             commit("setAnimation", false);
           });
@@ -180,6 +195,11 @@ export default new Vuex.Store({
             commit("setAnimation", false);
           })
           .catch(err => {
+            if (err.response.status == 401){
+                localStorage.clear();
+                console.log(err.response)
+                router.push("/");
+            }
             reject(err);
             commit("setAnimation", false);
           });
@@ -199,6 +219,10 @@ export default new Vuex.Store({
             commit("setAnimation", false);
           })
           .catch(err => {
+            if (err.response.status == 401){
+                console.log(err.response)
+                router.push("/");
+            }
             reject(err);
             commit("setAnimation", false);
           });
@@ -217,7 +241,11 @@ export default new Vuex.Store({
             commit("setAnimation", false);
           })
           .catch(err => {
-            router.push("/error");
+            if (err.response.status == 401){
+                localStorage.clear();
+                console.log(err.response)
+                router.push("/");
+            }
             reject(err);
             commit("setAnimation", false);
           });
@@ -234,7 +262,11 @@ export default new Vuex.Store({
             commit("setLoanCategories", res);
           })
           .catch(err => {
-            router.push("/error");
+            if (err.response.status == 401){
+                localStorage.clear();
+                console.log(err.response)
+                router.push("/");
+            }
             reject(err);
             commit("setAnimation", false);
           });
@@ -249,14 +281,45 @@ export default new Vuex.Store({
           data: data
         })
           .then(res => {
+            console.log(res)
             resolve(res);
           })
           .catch(err => {
-            router.push("/error");
+
+             if (err.response.status == 401){
+                localStorage.clear();
+                    console.log(err.response)
+                    router.push("/");
+                }
             reject(err);
             commit("setAnimation", false);
           });
       });
+    },
+    applyLoan({ commit }, data){
+        return new Promise((resolve, reject) => {
+            commit("setAnimation", true);
+            Axios({
+              url: liveUrl + "api/ApplyLoan",
+              method: "POST",
+              data: data,
+              headers: { Authorization: "Bearer " + this.state.token }
+            })
+              .then(res => {
+                console.log(res)
+                resolve(res);
+              })
+              .catch(err => {
+                if (err.response.status == 401){
+                    localStorage.clear();
+                    console.log(err.response)
+                    router.push("/");
+                }
+                
+                reject(err);
+                commit("setAnimation", false);
+              });
+          });
     }
   },
   modules: {}

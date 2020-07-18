@@ -108,7 +108,7 @@ $textColor: #314172;
 .home {
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+   margin-top: 20px;
 }
 .title {
   color: $textColor;
@@ -201,6 +201,11 @@ $textColor: #314172;
   justify-content: space-between;
 }
 @media only screen and (max-width: 600px) {
+    .home {
+  display: flex;
+  flex-direction: column;
+   margin-top: 5px;
+}
   .stat-card {
     width: 100px;
   }
@@ -232,8 +237,9 @@ $textColor: #314172;
   }
   .title {
     color: $textColor;
-    font-size: 36px;
+    font-size: 28px;
     margin-bottom: 10px;
+    padding: 4px;
   }
 }
 </style>

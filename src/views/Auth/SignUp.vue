@@ -125,34 +125,47 @@
       <!-- Circles which indicates the steps of the form: -->
       <div id="regForm">
         <div class="bx--grid">
-            <div class="bx--row">
-    <div class="bx--col-lg-16"> <cv-progress
-          :vertical="false">
-          <cv-progress-step label="Step 1" additional-info="Optional info" :complete="complete[0]"/>
-           <cv-progress-step label="Step 2 is a bit longer" :complete="complete[1]"/>
-           <cv-progress-step label="Step 3" :complete="complete[0]" tip-text="Step 3 has hard coded tip"/>
-  
-  
-          </cv-progress></div>
-  </div>
-         
+          <div class="bx--row">
+            <div class="bx--col-lg-16">
+              <cv-progress :vertical="false">
+                <cv-progress-step
+                  label="Step 1"
+                  additional-info="Optional info"
+                  :complete="complete[0]"
+                />
+                <cv-progress-step
+                  label="Step 2 is a bit longer"
+                  :complete="complete[1]"
+                />
+                <cv-progress-step
+                  label="Step 3"
+                  :complete="complete[0]"
+                  tip-text="Step 3 has hard coded tip"
+                />
+              </cv-progress>
+            </div>
+          </div>
         </div>
         <transition name="fade" mode="out-in">
           <div class="tabs" v-if="currentTab == 1" key="1">
             <div class="form-row">
               <div class="input">
                 <span>First Name</span>
-                <input  v-model="userFormGroup.props.firstName"  placeholder="First name..." />
-                 <span v-if="userFormGroup.controls.firstName.errors">{{
+                <input
+                  v-model="userFormGroup.props.firstName"
+                  placeholder="First name..."
+                />
+                <span v-if="userFormGroup.controls.firstName.errors">{{
                   userFormGroup.controls.firstName.errorMessage
                 }}</span>
               </div>
               <div class="input">
                 <span>Last Name</span>
-                <input v-model="userFormGroup.props.lastName" placeholder="Last name..." />
-                <span>{{
-                  userFormGroup.controls.lastName.errorMessage
-                }}</span>
+                <input
+                  v-model="userFormGroup.props.lastName"
+                  placeholder="Last name..."
+                />
+                <span>{{ userFormGroup.controls.lastName.errorMessage }}</span>
               </div>
             </div>
 
@@ -188,7 +201,9 @@
                   placeholder="Email address..."
                   type="email"
                 />
-                <span v-if="userFormGroup.controls.email.errors">{{userFormGroup.controls.email.errors.email.message}}</span>
+                <span v-if="userFormGroup.controls.email.errors">{{
+                  userFormGroup.controls.email.errors.email.message
+                }}</span>
               </div>
             </div>
 
@@ -196,20 +211,26 @@
               <div class="input">
                 <span>Password</span>
                 <input
-                  v-model="userFormGroup.props.password" 
+                  v-model="userFormGroup.props.password"
                   type="password"
                   placeholder="Password..."
                 />
                 <span v-if="userFormGroup.controls.password.errors">{{
-                  userFormGroup.controls.password.errors.compare.message 
+                  userFormGroup.controls.password.errors.compare.message
                 }}</span>
               </div>
             </div>
             <div class="form-row">
               <div class="input">
                 <span>Confirm Password</span>
-                <input type="password" v-model="userFormGroup.props.confirmPassword" placeholder="Password..." />
-                <span v-if="userFormGroup.controls.confirmPassword.errors">{{userFormGroup.controls.confirmPassword.errors.compare.message}}</span>
+                <input
+                  type="password"
+                  v-model="userFormGroup.props.confirmPassword"
+                  placeholder="Password..."
+                />
+                <span v-if="userFormGroup.controls.confirmPassword.errors">{{
+                  userFormGroup.controls.confirmPassword.errors.compare.message
+                }}</span>
               </div>
             </div>
           </div>
@@ -327,18 +348,15 @@
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { DatePickerPlugin } from "@syncfusion/ej2-vue-calendars";
-import { DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
-Vue.use(DropDownListPlugin);
-Vue.use(DatePickerPlugin);
-import { RxFormBuilder, IFormGroup } from "@rxweb/reactive-forms"
-import { User} from "@/models/UserModel.ts"
+
+import { RxFormBuilder, IFormGroup } from "@rxweb/reactive-forms";
+import { User } from "@/models/UserModel.ts";
 
 @Component
 export default class SignUp extends Vue {
-  complete:number []=[]
+  complete: number[] = [];
   buttonText = "Next";
-  
+
   href = "";
   gender = ["male", "female"];
   selectedGender = "";
@@ -360,13 +378,13 @@ export default class SignUp extends Vue {
   kraPin = "";
   occupation = "";
   paymentPhone = 254;
-        userFormGroup!: IFormGroup<User>;
-        formBuilder: RxFormBuilder = new RxFormBuilder();
+  userFormGroup!: IFormGroup<User>;
+  formBuilder: RxFormBuilder = new RxFormBuilder();
 
-        constructor() {
-            super();
-            this.userFormGroup = this.formBuilder.formGroup(User) as IFormGroup<User>;
-        }
+  constructor() {
+    super();
+    this.userFormGroup = this.formBuilder.formGroup(User) as IFormGroup<User>;
+  }
   /* get currentTab(){
       if(this.$store.state.user?.data?.state=='draft'){
           return 2
@@ -383,14 +401,13 @@ export default class SignUp extends Vue {
       this.$store.state.user?.data?.data_type == "member_application" &&
       this.$store.state.user?.data?.state == "payment"
     ) {
-        this.complete.push(3)
+      this.complete.push(3);
       this.currentTab = 3;
     } else if (
       this.$store.state.user?.data?.data_type == "member_application"
     ) {
-        
       this.currentTab = 2;
-      this.complete.push(2)
+      this.complete.push(2);
     }
   }
   get registationFee() {
@@ -400,60 +417,62 @@ export default class SignUp extends Vue {
     const data = {
       "username": this.userFormGroup.props.email,
       "password": this.userFormGroup.props.password,
-      "name": this.userFormGroup.props.firstName + " " + this.userFormGroup.props.lastName,
+      "name":
+        this.userFormGroup.props.firstName +
+        " " +
+        this.userFormGroup.props.lastName,
       "email": this.userFormGroup.props.email,
       "phone_no": this.userFormGroup.props.phoneNumber,
-      "idno": this.userFormGroup.props.idNumber
+      "idno": this.userFormGroup.props.idNumber,
     };
-    if(!this.userFormGroup.invalid){
-        this.$store
-      .dispatch("signup", data)
-      .then(resp => {
-        console.log(resp);
-        this.successful = resp.status;
-        this.fetchToken();
-      })
-      .catch(err => {
-        if (err.response) {
-          this.errorMessage = err.response.data.message;
-          alert(err.response.data.message);
-          console.log(err.response);
-        } /*  else if (err.request) {
+    if (!this.userFormGroup.invalid) {
+      this.$store
+        .dispatch("signup", data)
+        .then((resp) => {
+          console.log(resp);
+          this.successful = resp.status;
+          this.fetchToken();
+        })
+        .catch((err) => {
+          if (err.response) {
+            this.errorMessage = err.response.data.message;
+            alert(err.response.data.message);
+            console.log(err.response);
+          } /*  else if (err.request) {
       // client never received a response, or request never left
     } else {
       // anything else
     } */
-        this.error = err == null ? "null" : "not";
-      });
-    }else{
-        console.log(this.userFormGroup.controlsError)
-        alert(this.userFormGroup.controlsError)
+          this.error = err == null ? "null" : "not";
+        });
+    } else {
+      console.log(this.userFormGroup.controlsError);
+      alert(this.userFormGroup.controlsError);
     }
-    
   }
   updateDetails() {
     const data = {
-     " marital_status": this.selectedMaritalSatus,
+      " marital_status": this.selectedMaritalSatus,
       "gender": this.selectedGender,
       "address": this.address,
       "date_of_birth": this.dateOfBirth,
-      "home_address": this.address
+      "home_address": this.address,
     };
-    this.$store.dispatch("updateUser", data).then(resp => {
+    this.$store.dispatch("updateUser", data).then((resp) => {
       console.log(resp);
       this.successful = resp.status;
       this.currentTab = 3;
-      this.complete.push(3)
+      this.complete.push(3);
     });
   }
   fetchToken() {
     const auth = {
-      "username": this.userFormGroup.props.email,
-      "password": this.userFormGroup.props.password
+      username: this.userFormGroup.props.email,
+      password: this.userFormGroup.props.password,
     };
-    this.$store.dispatch("fetchToken", auth).then(resp => {
+    this.$store.dispatch("fetchToken", auth).then((resp) => {
       this.currentTab = 2;
-      this.complete.push(2)
+      this.complete.push(2);
     });
   }
   clickHanlder() {
@@ -490,23 +509,23 @@ export default class SignUp extends Vue {
   makePayment() {
     const data = {
       header: {
-        "transaction_type": "registration"
+        "transaction_type": "registration",
       },
       lines: [
         {
           "transaction_type": "registration",
-          "amount": 1
-        }
+          amount: 1,
+        },
       ],
 
-      "phone": this.paymentPhone
+      phone: this.paymentPhone,
     };
     this.$store
       .dispatch("makePayment", data)
-      .then(resp => {
+      .then((resp) => {
         console.log(resp);
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.response) {
           this.errorMessage = err.response.data.message;
 
@@ -776,6 +795,5 @@ button:hover {
     flex-direction: column;
     width: 100%;
   }
-  
 }
 </style>

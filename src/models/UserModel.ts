@@ -23,3 +23,11 @@ export class User {
     @compare({ fieldName: 'password', message: 'You must enter same password' })
     confirmPassword!: string;
 }
+
+export class UserLogin{
+    @email({message:'Invalid email'})
+    email!: string;
+
+    @required()
+    password!: string;
+}

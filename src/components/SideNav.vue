@@ -42,7 +42,7 @@ export default class SideNav extends Vue {
   left: 0;
   background-color: #2f46a7;
   overflow-x: hidden;
-  padding-top: 16px;
+  
   transition: 0.5s;
 }
 .nav-tabs {
@@ -71,7 +71,8 @@ export default class SideNav extends Vue {
   cursor: default;
 }
 .nav-header {
-  height: 140px;
+  height: 70px;
+  background-color: #2f46a7;
 }
 button {
   margin-top: 20px;
