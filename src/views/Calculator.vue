@@ -142,6 +142,7 @@
 </template>
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import Pusher from 'pusher-js'
 /* import mobileIcon  from "@/assets/svg/online-payment.svg" */
 import _ from "lodash";
 
@@ -169,9 +170,7 @@ export default class Calculator extends Vue {
   monthlyRepayment = ''
   isLoading = false
   
-  mounted(){
-      console.log(this.mobileLoans)
-  }
+ 
   get loans() {
       const data = JSON.parse(this.$store.state.user.data.loan_calculator).filter(
         (loan:any)=>loan.loan_category =="term"
@@ -230,6 +229,7 @@ export default class Calculator extends Vue {
     this.$store.dispatch('applyLoan',args).then(resp=>{
         this.isLoading = false
         console.log(resp)
+        
         this.$notify({
   group: 'foo',
   title: 'Important message',

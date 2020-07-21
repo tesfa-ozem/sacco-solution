@@ -12,9 +12,11 @@ import { ReactiveFormConfig, ClientLibrary } from '@rxweb/reactive-forms';
 import { DatePickerPlugin } from "@syncfusion/ej2-vue-calendars";
 import { DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
 import Notifications from 'vue-notification'
+import { GridPlugin} from "@syncfusion/ej2-vue-grids";
 Vue.use(Notifications)
 Vue.use(DropDownListPlugin);
 Vue.use(DatePickerPlugin);
+Vue.use(GridPlugin);
 Vue.component('loading',Loading)
 ReactiveFormConfig.clientLib = ClientLibrary.Vue;
 

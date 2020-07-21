@@ -2,8 +2,20 @@
   <div id="app">
     <vue-progress-bar></vue-progress-bar>
     <notifications group="foo" />
-    <template v-if="this.$router.currentRoute.meta.guest == true"
-      ><div>
+    <notifications group="custom-template" position="bottom right">
+    
+      <template slot="body" slot-scope="props">
+        <div>
+          <a class="title">{{props.item.title}}</a>
+          <a class="close" @click="props.close">
+            <i class="las la-times"></i>
+          </a>
+          <div v-html="props.item.text"></div>
+        </div>
+      </template>
+    </notifications>
+    <template v-if="this.$router.currentRoute.meta.guest == true">
+      <div>
         <transition name="component-fade" mode="out-in">
           <router-view></router-view>
         </transition>
@@ -11,14 +23,11 @@
     </template>
     <template v-else>
       <div>
-        <SideNav
-          v-bind:style="{ width: active ? '300px' : '0px' }"
-          v-if="windowWidth > 939"
-        />
+        <SideNav v-bind:style="{ width: active ? '300px' : '0px' }" v-if="windowWidth > 939" />
         <div class="topnav" id="myTopnav">
-          <a href="#" @click="toggale = !toggale" class="active"
-            ><i class="las la-bars la-2x"></i
-          ></a>
+          <a href="#" @click="toggale = !toggale" class="active">
+            <i class="las la-bars la-2x"></i>
+          </a>
         </div>
 
         <MobileMenu
@@ -38,6 +47,7 @@
   </div>
 </template>
 <script lang="ts">
+import Pusher from "pusher-js";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import SideNav from "@/components/SideNav.vue";
 import DynamicHeader from "@/components/Header.vue";
@@ -46,49 +56,66 @@ import MobileMenu from "@/components/MobileMenu.vue";
   components: {
     SideNav,
     DynamicHeader,
-    MobileMenu,
-  },
+    MobileMenu
+  }
 })
 export default class App extends Vue {
   active = true;
   toggale = false;
+  isLoading = this.$store.state.isLoading
   openNav(e: any) {
     this.toggale = e;
     console.log(e);
-    
+
     /* this.active = !this.active; */
   }
-  mounted () {
+  mounted() {
     //  [App.vue specific] When App.vue is finish loading finish the progress bar
-    this.$Progress.finish()
+    this.$Progress.finish();
   }
-  
+  notification() {
+    this.$notify({
+      group: "custom-template",
+      title: "Important message",
+      text: "data",
+      type: "warn",
+      duration: 10000
+    });
+  }
   created() {
+    const pusher = new Pusher("c0ba8f55f3582dc8b8d2", {
+      cluster: "mt1"
+    });
+
+    const channel = pusher.subscribe("todo");
+    channel.bind("item-removed", (data: any) => {
+      console.log(JSON.stringify(data));
+      this.notification();
+    });
     window.addEventListener("resize", () =>
       this.$store.commit("setWindowWidth")
     );
-     //  [App.vue specific] When App.vue is first loaded start the progress bar
-    this.$Progress.start()
+    //  [App.vue specific] When App.vue is first loaded start the progress bar
+    this.$Progress.start();
     //  hook the progress bar to start before we move router-view
     this.$router.beforeEach((to, from, next) => {
       //  does the page we want to go to have a meta.progress object
       if (to.meta.progress !== undefined) {
-        const meta = to.meta.progress
+        const meta = to.meta.progress;
         // parse meta tags
       }
       //  start the progress bar
-      this.$Progress.start()
+      this.$Progress.start();
       //  continue to next page
-      next()
-    })
+      next();
+    });
     //  hook the progress bar to finish after we've finished moving router-view
     this.$router.afterEach((to, from) => {
       //  finish the progress bar
-      this.$Progress.finish()
-    })
-  
+      this.$Progress.finish();
+    });
   }
-  
+
   get windowWidth() {
     return this.$store.state.windowWidth;
   }
@@ -135,7 +162,7 @@ body {
 }
 .main {
   transition: margin-left 0.5s;
- 
+
   margin-left: 300px;
 }
 .component-fade-enter-active,

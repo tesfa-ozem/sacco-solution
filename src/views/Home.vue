@@ -26,7 +26,7 @@
     <div class="stats">
       <p>Stats</p>
       <div class="stats-container">
-        <div class="stat-card">
+        <div class="stat-card" @click="currentTabComponent= 'Table' ">
           <div class="stat-card-title">
             <span class="stat-name">Deposits</span>
             <span class="count"
@@ -37,7 +37,7 @@
             <i class="las la-plus-circle la-2x"></i>
           </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" @click="currentTabComponent='LoanTable'">
           <div class="stat-card-title">
             <span class="stat-name">Outstanding Loan</span>
             <span class="count">KES {{ formatPrice(user.current_loan) }}</span>
@@ -49,7 +49,7 @@
         <div class="stat-card">
           <div class="stat-card-title">
             <span class="stat-name">Total Share</span>
-            <span class="count">{{ user.current_shares }}</span>
+            <span class="count">KES {{ formatPrice(user.current_shares) }}</span>
           </div>
           <div class="start-icon">
             <i class="las la-plus-circle la-2x"></i>
@@ -65,7 +65,7 @@
       <p>Recent</p>
     </div>
     <div class="stats">
-      <Table />
+      <component v-bind:is="currentTabComponent"></component>
     </div>
   </div>
 </template>
@@ -78,6 +78,7 @@ import MoneyIcon from "@/assets/svg/money.svg";
 import personIcon from "@/assets/svg/person.svg";
 import fileIcon from "@/assets/svg/files.svg";
 import Table from "@/components/Table.vue";
+import LoanTable from '@/components/LoansTable.vue'
 
 @Component({
   components: {
@@ -85,12 +86,18 @@ import Table from "@/components/Table.vue";
     MoneyIcon,
     personIcon,
     fileIcon,
-    Table
+    Table,
+    LoanTable
   }
 })
 export default class Home extends Vue {
+
+  currentTabComponent= "Table" 
   created() {
     this.$store.dispatch("getLoanCategories");
+    this.$store.dispatch("getAllLoans").then(resp => {
+      console.log(resp);
+    });
   }
   formatPrice(value) {
     this.val = (value / 1).toFixed(2).replace(",", ".");
@@ -162,6 +169,7 @@ $textColor: #314172;
   }
 
   .stat-card {
+    cursor: default;
     height: 150px;
     width: 350px;
     background-color: white;
