@@ -1,32 +1,41 @@
 <template>
   <div>
-  
     <ejs-grid
       :dataSource="loanData"
       :allowPaging="true"
       :pageSettings="pageSettings"
-      :toolbar='toolbar'
-      :allowFiltering='true' 
-      :filterSettings='filterSettings'
+      :toolbar="toolbar"
+      :allowFiltering="true"
+      :filterSettings="filterSettings"
       height="272px"
     >
       <e-columns>
-        <e-column field="name" headerText="Loan Number" textAlign="Left"></e-column>
+        <e-column  field="name" headerText="Loan Number" textAlign="Right"  width="200"></e-column>
 
         <e-column
           field="transaction_name"
           headerText="Description"
           :template="cTemplate"
-          textAlign="Left"
+          textAlign="Right"
+           width="250"
+          
         ></e-column>
-        <e-column field="application_date" headerText="Date" textAlign="Left"></e-column>
-        <e-column field="state" headerText="Status" textAlign="Left"></e-column>
+        <e-column field="application_date"  width="250" headerText="Date"  textAlign="Right"></e-column>
+        <e-column field="state"  headerText="Status" textAlign="Right" width="100"  :template="sTemplate"></e-column>
         <e-column
           field="requested_amount"
           headerText="Amount"
+          
           :template="aTemplate"
-          textAlign="Left"
+          textAlign="Right"
         ></e-column>
+        <e-column 
+        field="state"
+        headerText="Action"
+        :template="actionTemplate"
+        textAlign="Right"
+        >
+        </e-column>
       </e-columns>
     </ejs-grid>
   </div>
@@ -39,7 +48,7 @@ import {
   Filter,
   Search,
   GridComponent,
-   FilterType,
+  FilterType
 } from "@syncfusion/ej2-vue-grids";
 import ProjectMixin from "@/mixins/ProjectMixin";
 import {
@@ -75,16 +84,48 @@ export default Vue.extend({
           })
         };
       },
-       ddldata: ['All','appraisal'],
-       filterSettings: { type: 'Menu' },
+      sTemplate: function() {
+        return {
+          template: Vue.component("sTemplate", {
+            template: `<div id="status" :class="{'statustemp': true, 'e-activecolor': data.state == appraisal, \
+            'e-inactivecolor': data.state == inactive,'e-draft':data.state==draft,\
+            'e-complete':data.state==complete,'e-pending':data.state==pending,'e-defaulted':data.state==defaulted,'e-approved':data.state==approved}">\
+             <span :class="{'statustxt': true, 'e-activecolor': data.state == appraisal,\
+              'e-inactivecolor': data.state == inactive,'e-draft':data.state==draft,\
+              'e-complete':data.state==complete,'e-pending':data.state==pending,\
+              'e-defaulted':data.state==defaulted,'e-approved':data.state==approved}">{{data.state}}</span></div>`,
+            data: function() {
+              return {
+                data: {},
+                appraisal: "appraisal",
+                inactive: "repayment",
+                draft: "draft",
+                complete: "complete",
+                pending: "pending",
+                defaulted:'defaulted',
+                approved:'approved'
+              };
+            },
+            mixins: [ProjectMixin],
+            methods: {}
+          })
+        };
+      },
+      actionTemplate:function(){
+          return {template: Vue.component('actionTemplate',{
+              template:`<div>
+              <button>Repay</button>
+              </div>`
+          })}
+      },
+      ddldata: ["All", "appraisal"],
+      filterSettings: { type: "Menu" }
     };
   },
-  methods:{
-      push(){
-          console.log("hello")
-      },
-      
-    
+  methods: {
+    push() {
+      console.log("hello");
+    }
   },
   mixins: [ProjectMixin],
   computed: {
@@ -110,40 +151,40 @@ export default Vue.extend({
 @import "../../node_modules/@syncfusion/ej2-vue-grids/styles/fabric.css";
 @import "../../node_modules/@syncfusion/ej2-vue-grids/styles/fabric.css";
 .select-wrap {
-    padding: 0 0 10px 0;
-    font-family: Roboto;
-    padding: 1em;
+  padding: 0 0 10px 0;
+  font-family: Roboto;
+  padding: 1em;
 }
 
 .select-wrap select {
-    height: 28px;
-    width: 100%;
-    border-width: 0 0 2px 0;
-    background: transparent;
+  height: 28px;
+  width: 100%;
+  border-width: 0 0 2px 0;
+  background: transparent;
 }
 
 .select-wrap select:focus {
-    border-bottom-style: solid;
-    border-color: #ff4081;
+  border-bottom-style: solid;
+  border-color: #f2ff40;
 }
 
-.select-wrap select, 
+.select-wrap select,
 .select-wrap select option {
-    outline: none;
-    font-size: 14px;
-    padding: .2em;
-    height: 30px;
+  outline: none;
+  font-size: 14px;
+  padding: 0.2em;
+  height: 30px;
 }
 
-@media (min-width: 480px) and (max-width:639px) {
-    .select-wrap {
-        width: 40%
-    }
+@media (min-width: 480px) and (max-width: 639px) {
+  .select-wrap {
+    width: 40%;
+  }
 }
 
-@media (min-width:640px) {
-    .select-wrap {
-        width: 25%
-    }
+@media (min-width: 640px) {
+  .select-wrap {
+    width: 25%;
+  }
 }
 </style>

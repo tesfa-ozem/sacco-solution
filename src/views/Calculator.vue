@@ -110,6 +110,10 @@
         </div>
       </div>
       <div class="summary">
+      <Chart
+      :chartData="chartData"
+      />
+        <div >
         <div class="summary-field">
           <span>Principal</span>
           <span>KSE {{ formatPrice(loanAmount) }}</span>
@@ -130,9 +134,12 @@
           <span>Total</span>
           <span>KSE {{ formatPrice(total) }}</span>
         </div>
+            <button @click="applyLoan()">Apply</button>
+        
 
-        <button @click="applyLoan()">Apply</button>
-        <span>This includes sevice charges and processing fees.</span>
+        </div>
+
+        
       </div>
     </div>
     <loading
@@ -144,14 +151,25 @@
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Pusher from 'pusher-js'
 /* import mobileIcon  from "@/assets/svg/online-payment.svg" */
+import Chart from "@/components/Chart.vue"
 import _ from "lodash";
-
+interface LabeledValue {
+    x: string;
+    y:string;
+    text:string;
+}
+interface ChartModal {
+    array:LabeledValue
+}
+type ComplexObjectInterface<LabeledValue> = []
 /* var formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0
     }); */
-@Component
+@Component({components: {
+    Chart
+  }})
 export default class Calculator extends Vue {
   comparisonvalue ="mobile" ;
   /* loanAmount = 100000;  */
@@ -169,6 +187,7 @@ export default class Calculator extends Vue {
   productId = ''
   monthlyRepayment = ''
   isLoading = false
+  chartData:any[] = []
   
  
   get loans() {
@@ -179,21 +198,28 @@ export default class Calculator extends Vue {
   }
  
   calculateLoan() {
+      this.chartData = []
     const data = {
       "loan_product_type":this.productId,
       "loan_category": this.comparisonvalue,
       "requested_amount": this.loanAmount,
     };
-    console.log(data)
+    
     this.$store
       .dispatch("calculateLoan", data)
       .then((resp) => {
-          
+         
         this.interest = resp.data[0].interest;
         this.otherCharges = resp.data[0].charges;
         this.monthlyRepayment = resp.data[0].monthly_repayment
         this.total = resp.data[0].total
         
+        _.each(resp.data[0],(value:any, key:any)=>{
+            if(key=="principal"||key=="interest"||key=="charges"){
+                this.chartData.push({ x: key, y: Math.round(value), text: key })
+            }
+        })
+        console.log(this.chartData)
       })
       .catch((err) => {
         console.log(err);
@@ -475,8 +501,8 @@ $activeShadow: 0 0 10px rgba($teal1, 0.5);
 //loan filter
 .summary {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-evenly;
   align-content: center;
   align-items: center;
   margin-left: 20px;
@@ -494,11 +520,18 @@ $activeShadow: 0 0 10px rgba($teal1, 0.5);
     color: $textColor;
   }
 }
-.filters,
-.summary {
-  width: 50%;
+.filters{
+  width: 40%;
   padding: 50px;
 }
+.summary {
+  width: 60%;
+  width: 60%;
+  padding: 50px;
+  background-color: rgb(238, 238, 238);
+}
+
+
 .loan-filter {
   height: 600px;
   width: 100%;
@@ -517,12 +550,12 @@ $activeShadow: 0 0 10px rgba($teal1, 0.5);
     margin-top: 20px;
 
     span:nth-child(2) {
-      font-size: 20px;
+      font-size: 16px;
       font-weight: bold;
       text-align: end;
     }
     span:nth-child(1) {
-      font-size: 24px;
+      font-size: 18px;
       text-align: start;
     }
   }
@@ -611,11 +644,7 @@ $activeShadow: 0 0 10px rgba($teal1, 0.5);
     border: $textColor solid 1px;
   }
 }
-.summary {
-  background-color: rgb(238, 238, 238);
-  display: flex;
-  flex-direction: column;
-}
+
 .range-slide-lable {
   display: flex;
   flex-direction: row;

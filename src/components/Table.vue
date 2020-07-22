@@ -51,22 +51,7 @@ export default Vue.extend({
           }),
         };
       },
-      sTemplate:function(){
-          return {
-          template: Vue.component("cTemplate", {
-            template: "<div>KSH {{formatPrice(data.amount)}}</div>",
-            data: function () { return { data: {} }; },
-            mixins: [ProjectMixin],
-            methods: {
-                showState(state){
-                    if(state =='appresial'){
-                        console.log("")
-                    }
-                }
-            },
-          }),
-        };
-      }
+     
     };
   },
   computed: {
@@ -121,7 +106,7 @@ line-height: 1;
 }
 
 .material .empimg {
-    background-color: #e3165b;
+    background-color: #e3d516;
 }
 
 .highcontrast .empimg {
@@ -225,32 +210,66 @@ position: relative;
 }
 
  #overviewgrid td.e-rowcell .statustxt.e-inactivecolor {
-    color: #e60000;
+    color: #e6cf00;
     position: relative;
     top: 9px;
 }
 
 .statustemp.e-inactivecolor {
+    background-color: #fcffcc;
+    width: 64px;
+}
+.statustemp.e-defaulted {
     background-color: #ffd7cc;
     width: 64px;
 }
 
 .statustemp.e-activecolor {
-    background-color: #ccffcc;
+    background-color: #d0ddfa;
+    
     width: 57px;
 }
-
+.statustemp.e-draft{
+    background-color: #cccccc;
+    width: 57px;
+}
+.statustemp.e-complete{
+    background-color: #7b89ff;
+    width: 57px;
+}
+.statustemp.e-pending{
+    background-color: #fdfdff;
+    width: 57px;
+}
+.statustemp.e-approved{
+    background: rgb(213, 251, 156);
+    width: 57px;
+}
 .statustxt.e-activecolor {
-    color: #00cc00;
+    color: #2f46a7;
 }
 
 .statustxt.e-inactivecolor {
+    color: #bba800;
+}
+.statustext.e-draft{
+    color:rgb(59, 59, 59);
+}
+.statustext.e-complete{
+    color:rgb(218, 239, 248);
+}
+.statustext.e-pending{
+    color:rgb(126, 126, 126);
+}
+.statustext.e-defaulted{
     color: #e60000;
 }
-
+.statustext.e-approved{
+    color: #00cc00;
+}
 .statustemp {
-    position: relative;
-    height: 19px;
+    
+    height: 24px;
     border-radius: 5px;
     text-align: center
 }

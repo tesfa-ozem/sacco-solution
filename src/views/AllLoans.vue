@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LoanTable/>
+    
   </div>
 </template>
 <script lang='ts'>

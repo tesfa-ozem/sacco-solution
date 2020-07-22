@@ -14,6 +14,7 @@
     "@syncfusion/ej2-base": "^18.1.57",
     "@syncfusion/ej2-lists": "^18.1.53",
     "@syncfusion/ej2-vue-calendars": "^18.1.57",
+    "@syncfusion/ej2-vue-charts": "^18.2.46",
     "@syncfusion/ej2-vue-dropdowns": "^18.1.59",
     "@syncfusion/ej2-vue-grids": "^18.1.59",
     "axios": "^0.19.2",
