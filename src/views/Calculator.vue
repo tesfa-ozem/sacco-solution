@@ -1,62 +1,45 @@
 <template>
   <div class="calculator-conatiner">
     <span class="title">Loan Calculator</span>
-    
-    
+
     <div class="loan-filter">
       <div class="filters">
         <span class="filter-title">Mobile Loan Calculator</span>
         <div class="loan-product-container">
-      <div class="tools">
-        <input
-        selected
-          class="checkbox-tools"
-          type="radio"
-          value="mobile"
-          name="mobile"
-          id="mobile"
-          v-model="comparisonvalue"
-        />
-        <label class="for-checkbox-tools" for="mobile">
-          <div class="icon-container">
-              <i class="las la-mobile "></i>
+          <div class="tools" v-for="loan in loanTypes" :key="loan">
+            <input
+              selected
+              class="checkbox-tools"
+              type="radio"
+              :value="loan"
+              :name="loan"
+              :id="loan"
+              @click="clear()"
+              v-model="comparisonvalue"
+            />
+            <label class="for-checkbox-tools"  :for="loan">
+              <div class="icon-container">
+                <i class="las la-mobile"></i>
+              </div>{{loan}}
+            </label>
           </div>
-          Mobile
-        </label>
-      </div>
-      <div class="tools">
-        <input
-          class="checkbox-tools"
-          type="radio"
-          value="term"
-          name="term"
-          id="term"
-          v-model="comparisonvalue"
-        />
-        <label class="for-checkbox-tools" for="term">
-            <div class="icon-container">
-                 <i class="lar la-building "></i>
-            </div>
-         
-          term
-        </label>
-      </div>
-    </div>
+          
+        </div>
         <div class="filter-option">
-            <div class="sliderwrap">
-                <label class="labeltext">Loan Product</label>
-                <ejs-dropdownlist
-                  id="dropdownlist"
-                  popupHeight="200px"
-                  popupWidth="150px"
-                  :dataSource ="comparisonvalue=='mobile'?mobileLoans:loans"
-                  v-model="selectedProduct"
-                  placeholder="Select Loan Product"
-                ></ejs-dropdownlist>
-            </div>
-        </div >
+          <div class="sliderwrap">
+            <label class="labeltext">Loan Product</label>
+            <ejs-dropdownlist
+              id="dropdownlist"
+              popupHeight="200px"
+              popupWidth="150px"
+              :dataSource="comparisonvalue=='mobile'?mobileLoans:loans"
+              v-model="selectedProduct"
+              placeholder="Select Loan Product"
+            ></ejs-dropdownlist>
+          </div>
+        </div>
         <div class="filter-option">
-          <div class="sliderwrap ">
+          <div class="sliderwrap">
             <label class="labeltext">Loan Amount</label>
             <div class="range-slide">
               <input
@@ -73,105 +56,105 @@
               </div>
             </div>
           </div>
-          <input readonly v-model.number="loanAmount" type="text" class="filter-value" />
+          <input
+            v-model.number="loanAmount"
+            type="text"
+            
+            class="filter-value"
+            :disabled="validated == 1"
+          />
         </div>
         <div class="filter-option">
-          <div class="sliderwrap ">
+          <div class="sliderwrap">
             <label class="labeltext">Period</label>
             <div class="range-slide">
-              <input
-                type="range"
-                min="14"
-                max="28"
-                value="50"
-                class="slider"
-                id="myRange"
-                readonly
-              />
+                 <vue-slider
+      v-model="value"
+      :interval="3"
+      :min="3"
+      :max="12"
+      :marks="true"
+    ></vue-slider>
               <div class="range-slide-lable">
-                <span>3</span>
-                <span>12</span>
+                
               </div>
             </div>
           </div>
-          <input readonly type="text" class="filter-value"  />
+          <input readonly v-model="value" type="text" class="filter-value" />
         </div>
-        
+
         <!-- <label class="date-lable">Start date</label>
         <div class="date-picker">
           <ejs-datepicker
             id="datepicker"
             :placeholder="waterMarkText"
           ></ejs-datepicker>
-        </div> -->
+        </div>-->
         <div class="buttons">
           <button>Clear All</button>
           <button @click="calculateLoan()">Calculate</button>
         </div>
       </div>
       <div class="summary">
-      <Chart
-      :chartData="chartData"
-      />
-        <div >
-        <div class="summary-field">
-          <span>Principal</span>
-          <span>KSE {{ formatPrice(loanAmount) }}</span>
+        <Chart :chartData="chartData" />
+        <div>
+          <div class="summary-field">
+            <span>Principal</span>
+            <span>KSE {{ formatPrice(loanAmount) }}</span>
+          </div>
+          <div class="summary-field">
+            <span>Interest</span>
+            <span>KSH {{ formatPrice(interest) }}</span>
+          </div>
+          <div class="summary-field">
+            <span>Charges</span>
+            <span>KSH {{ formatPrice(otherCharges) }}</span>
+          </div>
+          <div class="summary-field">
+            <span>Monthly Repayments</span>
+            <span>KSH {{ formatPrice(monthlyRepayment) }}</span>
+          </div>
+          <div class="summary-field">
+            <span>Total</span>
+            <span>KSE {{ formatPrice(total) }}</span>
+          </div>
+          <button @click="applyLoan()">Apply</button>
         </div>
-        <div class="summary-field">
-          <span>Interest</span>
-          <span>KSH {{ formatPrice(interest) }}</span>
-        </div>
-        <div class="summary-field">
-          <span>Charges</span>
-          <span>KSH {{ formatPrice(otherCharges) }}</span>
-        </div>
-        <div class="summary-field">
-          <span>Monthly Repayments</span>
-          <span>KSH {{ formatPrice(monthlyRepayment) }}</span>
-        </div>
-        <div class="summary-field">
-          <span>Total</span>
-          <span>KSE {{ formatPrice(total) }}</span>
-        </div>
-            <button @click="applyLoan()">Apply</button>
-        
-
-        </div>
-
-        
       </div>
     </div>
-    <loading
-    :exampleProperty ="isLoading"
-    />
+    <loading :exampleProperty="isLoading" />
   </div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import Pusher from 'pusher-js'
+import Pusher from "pusher-js";
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
 /* import mobileIcon  from "@/assets/svg/online-payment.svg" */
-import Chart from "@/components/Chart.vue"
+import Chart from "@/components/Chart.vue";
 import _ from "lodash";
 interface LabeledValue {
-    x: string;
-    y:string;
-    text:string;
+  x: string;
+  y: string;
+  text: string;
 }
 interface ChartModal {
-    array:LabeledValue
+  array: LabeledValue;
 }
-type ComplexObjectInterface<LabeledValue> = []
+type ComplexObjectInterface<LabeledValue> = [];
 /* var formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0
     }); */
-@Component({components: {
-    Chart
-  }})
+@Component({
+  components: {
+    Chart,
+     VueSlider
+  }
+})
 export default class Calculator extends Vue {
-  comparisonvalue ="mobile" ;
+  comparisonvalue = "mobile";
   /* loanAmount = 100000;  */
   interest = 0;
   period = "36";
@@ -183,53 +166,61 @@ export default class Calculator extends Vue {
   loanPicked: any = {};
   otherCharges = 0;
   total = 0;
-  selectedProduct = ''
-  productId = ''
-  monthlyRepayment = ''
-  isLoading = false
-  chartData:any[] = []
-  
- 
+  selectedProduct = "";
+  productId = "";
+  monthlyRepayment = "";
+  isLoading = false;
+  chartData: any[] = [];
+  validated = 0;
+  loanTypes = ['mobile','term']
+  value = 3
   get loans() {
-      const data = JSON.parse(this.$store.state.user.data.loan_calculator).filter(
-        (loan:any)=>loan.loan_category =="term"
-    )
-    return data.map((a:any)=>a.loan_product_name);
+    const data = JSON.parse(this.$store.state.user.data.loan_calculator).filter(
+      (loan: any) => loan.loan_category == "term"
+    );
+    return data.map((a: any) => a.loan_product_name);
   }
- 
+  clear(){
+      
+      this.interest =0
+      this.loanAmount = ""
+      this.total = 0
+      this.otherCharges = 0
+      this.monthlyRepayment =""
+  }
   calculateLoan() {
-      this.chartData = []
+    this.chartData = [];
     const data = {
-      "loan_product_type":this.productId,
+      "loan_product_type": this.productId,
       "loan_category": this.comparisonvalue,
       "requested_amount": this.loanAmount,
+      "installments":this.value
     };
-    
+
     this.$store
       .dispatch("calculateLoan", data)
-      .then((resp) => {
-         
+      .then(resp => {
         this.interest = resp.data[0].interest;
         this.otherCharges = resp.data[0].charges;
-        this.monthlyRepayment = resp.data[0].monthly_repayment
-        this.total = resp.data[0].total
-        
-        _.each(resp.data[0],(value:any, key:any)=>{
-            if(key=="principal"||key=="interest"||key=="charges"){
-                this.chartData.push({ x: key, y: Math.round(value), text: key })
-            }
-        })
-        console.log(this.chartData)
+        this.monthlyRepayment = resp.data[0].monthly_repayment;
+        this.total = resp.data[0].total;
+
+        _.each(resp.data[0], (value: any, key: any) => {
+          if (key == "principal" || key == "interest" || key == "charges") {
+            this.chartData.push({ x: key, y: Math.round(value), text: key });
+          }
+        });
+        console.log(this.chartData);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   }
   get mobileLoans() {
-      const data = JSON.parse(this.$store.state.user.data.loan_calculator).filter(
-        (loan:any)=>loan.loan_category =="mobile"
-    )
-    return data.map((a:any)=>a.loan_product_name)
+    const data = JSON.parse(this.$store.state.user.data.loan_calculator).filter(
+      (loan: any) => loan.loan_category == "mobile"
+    );
+    return data.map((a: any) => a.loan_product_name);
   }
   formatPrice(value: any) {
     this.val = (value / 1).toFixed(2).replace(",", ".");
@@ -244,40 +235,59 @@ export default class Calculator extends Vue {
     this.loanValue = v;
   }
 
-  
-  applyLoan(){
-    this.isLoading = true
-    const  args = {
-        "loan_product": this.productId,
-        "loan_category": this.comparisonvalue,
-        "requested_amount": this.loanAmount
-    }
-    this.$store.dispatch('applyLoan',args).then(resp=>{
-        this.isLoading = false
-        console.log(resp)
-        
+  applyLoan() {
+    this.isLoading = true;
+    const args = {
+      "loan_product": this.productId,
+      "loan_category": this.comparisonvalue,
+      "requested_amount": this.loanAmount
+    };
+    this.$store
+      .dispatch("applyLoan", args)
+      .then(resp => {
+        this.isLoading = false;
+        console.log(resp);
+
         this.$notify({
-  group: 'foo',
-  title: 'Important message',
-  text: resp.data[0].description,
-  type: 'warn',
-  duration: 10000,
-});
+          group: "foo",
+          title: "Important message",
+          text: resp.data[0].description,
+          type: "warn",
+          duration: 10000
+        });
         this.$store.dispatch("getLedger");
         this.$store.dispatch("fetchUser");
-    }).catch(err=>{
-        this.isLoading = false
-        console.log(err)
-    })
+      })
+      .catch(err => {
+        this.isLoading = false;
+        console.log(err);
+      });
   }
   @Watch("selectedProduct")
   myFunction() {
+      this.interest =0
+      this.loanAmount = ""
+      this.total = 0
+      this.otherCharges = 0
+      this.monthlyRepayment =""
     console.log("clicked");
-    const loan =JSON.parse(this.$store.state.user.data.loan_calculator).filter(
-        (loan:any)=>loan.loan_product_name == this.selectedProduct
-    )
-    this.loanMaximum = loan[0]?.amount
-    this.productId = loan[0]?.loan_product_id
+    const loan = JSON.parse(this.$store.state.user.data.loan_calculator).filter(
+      (loan: any) => loan.loan_product_name == this.selectedProduct
+    );
+    this.loanMaximum = loan[0]?.amount;
+    this.productId = loan[0]?.loan_product_id;
+  }
+  @Watch("loanAmount")
+  AmountWatch() {
+    try{
+        if (this.loanAmount > this.loanMaximum || this.loanAmount.includes("-")) {
+      this.validated = 1;
+    } else {
+      this.validated = 0;
+    }
+    }catch(err){
+        console.log(err)
+    }
   }
 }
 </script>
@@ -288,7 +298,7 @@ export default class Calculator extends Vue {
 @import "../../node_modules/@syncfusion/ej2-inputs/styles/fabric.css";
 @import "../../node_modules/@syncfusion/ej2-popups/styles/fabric.css";
 @import "../../node_modules/@syncfusion/ej2-lists/styles/fabric.css";
-@import "../../node_modules/@syncfusion/ej2-vue-calendars/styles/fabric.css";
+@import "../../node_modules/@syncfusion/ej2-vue-calendars/styles/fabric.css"; 
 $primaryColor: #2f46a7;
 $accentColor: #54cadc;
 $textColor: #314172;
@@ -312,7 +322,7 @@ $teal1: #66b3fb;
 $teal2: #4b9dea;
 $charcoal: #555555;
 $gold: #b6985a;
-$borderColor:rgba(168, 168, 219, 0.123);
+$borderColor: rgba(168, 168, 219, 0.123);
 $activeShadow: 0 0 10px rgba($teal1, 0.5);
 
 /* MIXINS */
@@ -451,7 +461,6 @@ $activeShadow: 0 0 10px rgba($teal1, 0.5);
   visibility: hidden;
 }
 
-
 .tools {
   margin-right: 16px;
 }
@@ -485,11 +494,9 @@ $activeShadow: 0 0 10px rgba($teal1, 0.5);
   border: $borderColor solid 2px;
 }
 .checkbox-tools:checked + label {
- background: $borderColor;
+  background: $borderColor;
   border: $primaryColor solid 2px;
 }
-
-
 
 //
 .loan-product-container {
@@ -520,7 +527,7 @@ $activeShadow: 0 0 10px rgba($teal1, 0.5);
     color: $textColor;
   }
 }
-.filters{
+.filters {
   width: 40%;
   padding: 50px;
 }
@@ -530,7 +537,6 @@ $activeShadow: 0 0 10px rgba($teal1, 0.5);
   padding: 50px;
   background-color: rgb(238, 238, 238);
 }
-
 
 .loan-filter {
   height: 600px;
@@ -683,16 +689,16 @@ button:nth-child(2) {
   color: white;
   border: none;
 }
-.icon-container{
-    height: 25px;
-    width: 25px;
-    border-radius: 50%;
-    background: rgb(255, 255, 255);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
+.icon-container {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  background: rgb(255, 255, 255);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
 }
 @media only screen and (max-width: 600px) {
   .loan-filter {
@@ -738,41 +744,40 @@ button:nth-child(2) {
     justify-content: center;
   }
   [type="checkbox"]:checked,
-[type="checkbox"]:not(:checked),
-[type="radio"]:checked,
-[type="radio"]:not(:checked) {
-  position: absolute;
-  left: -9999px;
-  width: 0;
-  height: 0;
-  visibility: hidden;
-}
-.checkbox-tools:checked + label,
-.checkbox-tools:not(:checked) + label {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-  padding: 20px;
-  z-index: -0;
-  width: 100px;
-  height: 20px;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 1px;
-  margin: 0 auto;
-  margin-bottom: 10px;
-  text-align: center;
-  border-radius: 0px;
-  overflow: hidden;
-  cursor: pointer;
-  text-transform: uppercase;
-  color: $primaryColor;
-  -webkit-transition: all 300ms linear;
-  transition: all 300ms linear;
-}
+  [type="checkbox"]:not(:checked),
+  [type="radio"]:checked,
+  [type="radio"]:not(:checked) {
+    position: absolute;
+    left: -9999px;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }
+  .checkbox-tools:checked + label,
+  .checkbox-tools:not(:checked) + label {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 20px;
+    z-index: -0;
+    width: 100px;
+    height: 20px;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 1px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    text-align: center;
+    border-radius: 0px;
+    overflow: hidden;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: $primaryColor;
+    -webkit-transition: all 300ms linear;
+    transition: all 300ms linear;
+  }
 }
 /* Loading animation */
-
 </style>

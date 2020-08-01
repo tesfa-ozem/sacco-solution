@@ -26,7 +26,7 @@
     <div class="stats">
       <p>Stats</p>
       <div class="stats-container">
-        <div class="stat-card" @click="currentTabComponent= 'Table' ">
+        <div class="stat-card" >
           <div class="stat-card-title">
             <span class="stat-name">Deposits</span>
             <span class="count"
@@ -94,7 +94,7 @@ import LoanTable from '@/components/LoansTable.vue'
 })
 export default class Home extends Vue {
 
-  currentTabComponent= "Table" 
+  currentTabComponent= "LoanTable" 
   created() {
     this.$store.dispatch("getLoanCategories");
     this.$store.dispatch("getAllLoans").then(resp => {

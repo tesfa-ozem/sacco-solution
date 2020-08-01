@@ -1,5 +1,8 @@
 <template>
   <div class="main-container">
+  <loading
+  :exampleProperty ="isLoading"
+  />
     <div class="form-container">
       
 
@@ -54,8 +57,10 @@ export default class Login extends Vue {
   cssClass = "e-hide-spinner";
   error = "null";
   successful = 0;
+  isLoading =false
 
   login() {
+      this.isLoading = true
     console.log(this.error);
     const auth = {
       username: this.mail,
@@ -65,13 +70,16 @@ export default class Login extends Vue {
     this.$store
       .dispatch("singin", auth)
       .then(res => {
+          
         this.successful = res.status;
 
         this.$store.dispatch("getLedger");
         this.$store.dispatch("fetchUser").then(res => {
             this.$Progress.finish()
+            this.isLoading = false
           this.$router.push("/home").catch(err => {
             console.log(err);
+            
           });
         });
       })
