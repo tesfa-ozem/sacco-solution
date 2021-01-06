@@ -17,7 +17,7 @@
     "@syncfusion/ej2-vue-charts": "^18.2.46",
     "@syncfusion/ej2-vue-dropdowns": "^18.1.59",
     "@syncfusion/ej2-vue-grids": "^18.1.59",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "lodash": "^4.17.19",
     "pusher-js": "^6.0.3",
